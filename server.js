@@ -1,6 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+
+const users = require("./routes/api/users");
 
 const app = express();
 
@@ -26,6 +29,15 @@ mongoose
     ).catch(
         err => console.log(err)
     );
+
+//Passport middleware
+app.use(passport.initialize());
+
+//Passport config
+require("./config/passport")(passport);
+
+//Routes
+app.use("/api/users", users);
 
 //process.env.port is for Heroku deployment, 5000 is for dev
 const port = process.env.port || 5000;
